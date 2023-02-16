@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Callable
 
 # Use of https://docs.python.org/3/library/typing.html
 # PEP 483, 484
@@ -37,12 +37,25 @@ def TypingTest_Gross(firstParam: null = Some, secondParam: null = Some) -> null:
 
     print(f"{populated_args = }")
 
+def get_adder(summand1: float) -> Callable[[float], float]:
+    """Returns a function that adds numbers to a given number."""
+    def adder(summand2: float) -> float:
+        return summand1 + summand2
+
+    return adder
+
+def consume_adder(summand1: Callable[[float], float]) -> float:
+    return summand1(5)
+
 def main():
     TypingTest()
     TypingTest([1, 2, 3]) # should populate firstParam
 
     TypingTest_Gross(secondParam=[1, 2, 3], firstParam=[4, 5, 6])
     TypingTest_Gross(secondParam=[4, 5, 6])
+
+    print(get_adder(2)(3))
+    print(consume_adder(get_adder(5)))
 
 if __name__ == "__main__":
     main()
